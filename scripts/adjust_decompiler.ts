@@ -1,13 +1,13 @@
-import { writeFile, rename, readFile, readdir  } from "fs/promises";
+import { writeFile, rename, readFile  } from "fs/promises";
 import { join } from "path";
 
 const NATIVE_DB_URL =
   "https://raw.githubusercontent.com/alloc8or/rdr3-nativedb-data/master/natives.json";
-const SCRIPT_COMPILER_NATIVE_DB_PATH = join(
+const SCRIPT_DECOMPILER_NATIVE_DB_PATH = join(
   __dirname,
   "../vendor/script_decompiler/GTA V Script Decompiler/Resources/natives_rdr.json",
 );
-const TEMP_PATH = SCRIPT_COMPILER_NATIVE_DB_PATH + ".tmp";
+const TEMP_PATH = SCRIPT_DECOMPILER_NATIVE_DB_PATH + ".tmp";
 
 async function updateScriptCompilerNativeDb() {
   const response = await fetch(NATIVE_DB_URL);
@@ -19,14 +19,12 @@ async function updateScriptCompilerNativeDb() {
   const data = await response.text();
 
   await writeFile(TEMP_PATH, data, "utf8");
-  await rename(TEMP_PATH, SCRIPT_COMPILER_NATIVE_DB_PATH);
+  await rename(TEMP_PATH, SCRIPT_DECOMPILER_NATIVE_DB_PATH);
 }
 
 await updateScriptCompilerNativeDb();
 
-const DECOMPILER_CONFIG_PATH = join(__dirname, "../bin/GTA V Script Decompiler.dll.config")
-
-console.log(readdir(join(__dirname, "../bin")))
+const DECOMPILER_CONFIG_PATH = join(__dirname, "../vendor/script_decompiler/GTA V Script Decompiler/App.config")
 
 async function updateIsRdr2InDecompilerConfig() {
   const xml = await readFile(DECOMPILER_CONFIG_PATH, "utf8");
