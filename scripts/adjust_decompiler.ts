@@ -1,4 +1,4 @@
-import { writeFile, rename, readFile } from "fs/promises";
+import { writeFile, rename, readFile, readdir  } from "fs/promises";
 import { join } from "path";
 
 const NATIVE_DB_URL =
@@ -25,6 +25,8 @@ async function updateScriptCompilerNativeDb() {
 await updateScriptCompilerNativeDb();
 
 const DECOMPILER_CONFIG_PATH = join(__dirname, "../bin/GTA V Script Decompiler.dll.config")
+
+console.log(readdir(join(__dirname, "../bin")))
 
 async function updateIsRdr2InDecompilerConfig() {
   const xml = await readFile(DECOMPILER_CONFIG_PATH, "utf8");
