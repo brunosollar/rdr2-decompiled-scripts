@@ -6,7 +6,7 @@ const SCRIPT_DIRS = ["../vendor/script_rel", "../vendor/script_mp_rel"].map(dir 
 const DECOMPILER_PATH = join(__dirname, "../bin/GTA V Script Decompiler")
 
 SCRIPT_DIRS.forEach(dir => {
-  const args = [dir, "-r", "-n"];
+  const args = [dir, "-r", "-n", "-v"];
   const decompiler = spawn(DECOMPILER_PATH, args);
 
   decompiler.stdout.pipe(process.stdout);
