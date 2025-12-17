@@ -1,0 +1,63 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - "*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          submodules: recursive
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install Bun dependencies
+        run: bun install
+
+      - name: Update native DB
+        run: bun run scripts/update_native_db.ts
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 9.0.x
+
+      - name: Build script decompiler
+        run: |
+          dotnet build ./vendor/script_decompiler \
+            -c Release \
+            --output ./bin
+
+      - name: Decompile scripts
+        run: bun run scripts/decompile_scripts.ts
+
+      - name: Create zip archives
+        run: |
+          cd vendor/script_rel/exported
+          zip -r ../../../script_rel.zip .
+          cd -
+
+          cd vendor/script_mp_rel/exported
+          zip -r ../../../script_mp_rel.zip .
+          cd -
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            script_rel.zip
+            script_mp_rel.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

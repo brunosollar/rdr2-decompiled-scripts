@@ -1,0 +1,3 @@
+[submodule "vendor/script_decompiler"]
+	path = vendor/script_decompiler
+	url = https://github.com/maybegreat48/GTA-V-Script-Decompiler
