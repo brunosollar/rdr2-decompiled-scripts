@@ -26,8 +26,8 @@ jobs:
       - name: Install Bun dependencies
         run: bun install
 
-      - name: Update native DB
-        run: bun run scripts/update_native_db.ts
+      - name: Adjust decompiler
+        run: bun run scripts/adjust_decompiler.ts
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
