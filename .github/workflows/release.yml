@@ -23,9 +23,6 @@ jobs:
         with:
           bun-version: latest
 
-      - name: Install Bun dependencies
-        run: bun install
-
       - name: Adjust decompiler
         run: bun run scripts/adjust_decompiler.js
 
