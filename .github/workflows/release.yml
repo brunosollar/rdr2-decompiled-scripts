@@ -27,7 +27,7 @@ jobs:
         run: bun install
 
       - name: Adjust decompiler
-        run: bun run scripts/adjust_decompiler.ts
+        run: bun run scripts/adjust_decompiler.js
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
@@ -41,7 +41,7 @@ jobs:
             --output ./bin
 
       - name: Decompile scripts
-        run: bun run scripts/decompile_scripts.ts
+        run: bun run scripts/decompile_scripts.js
 
       - name: Create zip archives
         run: |
