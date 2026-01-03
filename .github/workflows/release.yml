@@ -12,6 +12,10 @@ jobs:
   release:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        game: [gta5, rdr2]
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -24,7 +28,7 @@ jobs:
           bun-version: latest
 
       - name: Adjust decompiler
-        run: bun run scripts/adjust_decompiler.js
+        run: bun run scripts/adjust_decompiler.js ${{ matrix.game }}
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
@@ -38,17 +42,20 @@ jobs:
             --output ./bin
 
       - name: Decompile scripts
-        run: bun run scripts/decompile_scripts.js
+        run: bun run scripts/decompile_scripts.js ${{ matrix.game }}
 
       - name: Create zip archives
         run: |
-          cd vendor/script_rel/exported
-          zip -r ../../../script_rel.zip .
+          cd vendor/${{ matrix.game }}_script_rel/exported
+          zip -r ../../../${{ matrix.game }}_script_rel.zip .
           cd -
 
-          cd vendor/script_mp_rel/exported
-          zip -r ../../../script_mp_rel.zip .
-          cd -
+      - name: Create MP zip archive (RDR2 only)
+        if: matrix.game == 'rdr2'
+        run: |
+          cd vendor/${{ matrix.game }}_script_mp_rel/exported
+          zip -r ../../../${{ matrix.game }}_script_mp_rel.zip .
+          cd -    
 
       - name: Create Release
         uses: softprops/action-gh-release@v2

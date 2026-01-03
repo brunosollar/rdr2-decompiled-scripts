@@ -2,7 +2,8 @@ import assert from "assert";
 import { spawn } from "child_process";
 import { join } from "path";
 
-const SCRIPT_DIRS = ["../vendor/script_rel", "../vendor/script_mp_rel"].map(dir => join(__dirname, dir))
+const GAME = Bun.argv[2]
+const SCRIPT_DIRS = [`../vendor/${GAME}_script_rel`, `../vendor/${GAME}_script_mp_rel`].map(dir => join(__dirname, dir))
 const DECOMPILER_PATH = join(__dirname, "../bin/GTA V Script Decompiler")
 
 SCRIPT_DIRS.forEach(dir => {
