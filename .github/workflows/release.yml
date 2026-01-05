@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 jobs:
-  release:
+  decompile:
     runs-on: ubuntu-latest
 
     strategy:
@@ -57,11 +57,28 @@ jobs:
           zip -r ../../../${{ matrix.game }}_script_mp_rel.zip .
           cd -    
 
-      - name: Create Release
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.game }}-artifacts
+          path: |
+            ${{ matrix.game }}_script_rel.zip
+            ${{ matrix.game }}_script_mp_rel.zip
+          if-no-files-found: ignore
+
+  release:
+    needs: decompile
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: |
-            script_rel.zip
-            script_mp_rel.zip
+          files: artifacts/**/*
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}        
