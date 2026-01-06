@@ -1,5 +1,3 @@
-# decompiled-scripts
-
 Decompiled scripts from **RDR2** (`rdr2_script_rel`), **RDO** (`rdr2_script_mp_rel`) and **GTA5 & GTAO** (`gta5_script_rel`).
 
 You can download the decompiled scripts from the [Releases](https://github.com/brunosollar/decompiled-scripts/releases) section.
